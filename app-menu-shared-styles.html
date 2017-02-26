@@ -7,7 +7,7 @@
     <style>
     /* need a wrapper element to make this higher specificity than the :host rule in paper-item */
     
-    .selectable-content > ::content .app-menu-item {
+    .selectable-content > ::content .app-menu-item, .app-menu-item {
       cursor: pointer;
       text-decoration: none;
       color: var(--app-menu-color, --primary-text-color);
@@ -25,7 +25,7 @@
       padding: 0 24px;
     }
     
-    .selectable-content > ::content .app-menu-item.iron-selected {
+    .selectable-content > ::content .app-menu-item.iron-selected, .app-menu-item.iron-selected {
       font-weight: 500;
       background-color: var(--app-menu-selected-bg-color, --primary-background-color);
       color: var(--primary-color);
@@ -37,7 +37,7 @@
       background-color: var(--app-menu-selected-bg-color, --primary-background-color);
     }
     
-    .selectable-content > ::content .app-menu-item .app-menu-icon {
+    .selectable-content > ::content .app-menu-item .app-menu-icon, .app-menu-item .app-menu-icon {
       margin-right: 15px;
       fill: var(--app-menu-color, --primary-text-color);
       transition: fill 0.4s ease-out;
