@@ -1,5 +1,4 @@
 <link rel="import" href="../paper-menu/paper-submenu.html">
-<link rel="stylesheet" href="app-menu.html">
 
 <link rel="import" href="app-menu-shared-styles.html">
 
@@ -33,7 +32,7 @@
     fill: var(--primary-color);
   }
   
-  app-menu {
+  .menu-content >::content app-menu {
     padding: 0;
   }
   </style>
@@ -52,10 +51,9 @@
         <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
       </a>
 
-
-      <app-menu id="submenuList" class="menu-content" selectable="[[selectable]]">
+      <div class="menu-content">
         <content></content>
-      </app-menu>
+      </div>
 
     </paper-submenu>
 
@@ -91,6 +89,9 @@
           observer: '_openedChanged'
         }
       },
+      get __appMenu() {
+        return Polymer.dom(this).queryDistributedElements('app-menu')[0];
+      },
       ready: function() {
         this.classList.add('app-submenu');
         this.$.submenu
@@ -121,11 +122,12 @@
       },
       _onParentIronActivate: function(event) {
         var parent = this.__parent;
-        var localTarget = Polymer.dom(event).localTarget;
+        var submenuList = Polymer.dom(event).localTarget;
+        var localTarget = Polymer.dom(submenuList).parentNode;
 
         if (localTarget === parent || localTarget !== this) {
           this.close();
-          this.$.submenuList.selectIndex(-1);
+          this.__appMenu.selectIndex(-1);
         }
       },
       _ironSelectHandler: function() {
