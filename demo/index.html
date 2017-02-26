@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+  <title>app-menu demo</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../app-menu.html">
+  <link rel="import" href="../app-submenu.html">
+
+  <style is="custom-style" include="demo-pages-shared-styles">
+  :root {
+    --app-menu-color: #616161;
+    --primary-color: #F62A5A;
+    --app-menu-selected-bg-color: rgba(0, 0, 0, 0.05);
+  }
+  </style>
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <h3>Basic app-menu demo</h3>
+    <demo-snippet>
+      <template>
+        <app-menu selected="0">
+
+          <a class="app-menu-item" href="#">
+            <div>
+              <iron-icon class="app-menu-icon" icon="icons:chrome-reader-mode"></iron-icon>
+              <span> News </span>
+            </div>
+          </a>
+
+          <app-submenu icon="icons:account-balance" name="Accounts">
+
+            <a class="app-menu-item">
+              <span>Google</span>
+            </a>
+            <a class="app-menu-item">
+              <span>Facebook</span>
+            </a>
+
+            <a class="app-menu-item">
+              <span>Twitter</span>
+            </a>
+
+          </app-submenu>
+
+          <a class="app-menu-item" href="#">
+            <div>
+              <iron-icon class="app-menu-icon" icon="icons:account-box"></iron-icon>
+              <span> Profile </span>
+            </div>
+          </a>
+
+          <a class="app-menu-item" href="#">
+            <div>
+              <iron-icon class="app-menu-icon" icon="icons:view-module"></iron-icon>
+              <span> Collections </span>
+            </div>
+          </a>
+
+          <app-submenu icon="chrome-reader-mode" name="Contacts">
+
+            <a class="app-menu-item">
+              <span>John</span>
+            </a>
+            <a class="app-menu-item">
+              <span>Harry</span>
+            </a>
+
+          </app-submenu>
+
+          <a class="app-menu-item" href="#">
+            <div>
+              <iron-icon class="app-menu-icon" icon="icons:build"></iron-icon>
+              <span> Setting </span>
+            </div>
+          </a>
+
+        </app-menu>
+      </template>
+    </demo-snippet>
+  </div>
+</body>
+
+</html>

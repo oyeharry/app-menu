@@ -1,0 +1,174 @@
+<link rel="import" href="../paper-menu/paper-submenu.html">
+<link rel="stylesheet" href="app-menu.html">
+
+<link rel="import" href="app-menu-shared-styles.html">
+
+<dom-module id="app-submenu">
+  <style include="app-menu-shared-styles"></style>
+  <!-- scoped CSS for this element -->
+  <style>
+  #submenu .menu-trigger {
+    color: var(--app-menu-color, --primary-text-color);
+  }
+  
+  #submenu .menu-trigger .app-menu-icon,
+  #submenu .expand-icon {
+    fill: var(--app-menu-color, --primary-text-color);
+  }
+  
+  #submenu .menu-trigger.iron-selected {
+    background-color: transparent;
+  }
+  
+  #submenu .menu-trigger:hover {
+    background-color: var(--app-menu-selected-bg-color, --primary-background-color);
+  }
+  
+  #submenu.active .menu-trigger {
+    color: var(--primary-color);
+  }
+  
+  #submenu.active .menu-trigger .app-menu-icon {
+    fill: var(--primary-color);
+  }
+  /*  #submenu .menu-trigger {
+    background-color: transparent;
+  }
+
+   #submenu.active .menu-trigger .menu-icon {
+    fill: var(--primary-color);
+  }
+  
+ #submenu .menu-trigger:hover {
+    background-color: var(--app-menu-selected-bg-color, --primary-background-color);
+  }
+  
+  #submenu .expand-icon {
+    @apply(--app-menu-item-icon-style);
+  }
+  
+  #submenu.active .menu-trigger {
+    color: var(--primary-color);
+  }
+  
+  #submenu.active .menu-trigger .menu-icon {
+    fill: var(--primary-color);
+  }*/
+  
+  app-menu {
+    padding: 0;
+  }
+  </style>
+
+  <template>
+
+    <paper-submenu id="submenu" class="submenu" data-wha="{{checkSelection(selectedItem)}}" opened="{{opened}}">
+
+      <a class="menu-trigger app-menu-item" on-tap="_menuTriggerHandler">
+        <div>
+          <template is="dom-if" if="[[icon]]">
+            <iron-icon icon="[[icon]]" class="app-menu-icon"></iron-icon>
+          </template>
+          <span>[[name]]</span>
+        </div>
+        <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
+      </a>
+
+
+      <app-menu id="submenuList" class="menu-content" selectable="[[selectable]]">
+        <content></content>
+      </app-menu>
+
+    </paper-submenu>
+
+  </template>
+
+  <script>
+  (function() {
+    'use strict';
+    Polymer({
+      is: 'app-submenu',
+      properties: {
+        /**
+         * Fired when the submenu is opened.
+         *
+         * @event app-submenu-open
+         */
+
+        /**
+         * Fired when the submenu is closed.
+         *
+         * @event app-submenu-close
+         */
+
+        /**
+         * Set opened to true to show the collapse element and to false to hide it.
+         *
+         * @attribute opened
+         */
+        opened: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          observer: '_openedChanged'
+        }
+      },
+      ready: function() {
+        this.classList.add('app-submenu');
+        this.$.submenu
+          .addEventListener('iron-select', this._ironSelectHandler.bind(this));
+        this.$.submenu
+          .addEventListener('iron-deselect', this._ironDeselectHandler.bind(this));
+        this._isOpened = false;
+      },
+      get __parent() {
+        return Polymer.dom(this).parentNode;
+      },
+      attached: function() {
+        this.listen(this.__parent, 'iron-activate', '_onParentIronActivate');
+      },
+
+      detached: function() {
+        this.unlisten(this.__parent, 'iron-activate', '_onParentIronActivate');
+      },
+      close: function() {
+        this.$.submenu.close();
+      },
+      _openedChanged: function(opened, oldOpened) {
+        if (opened) {
+          this.fire('app-submenu-open');
+        } else if (oldOpened != null) {
+          this.fire('app-submenu-close');
+        }
+      },
+      _onParentIronActivate: function(event) {
+        var parent = this.__parent;
+        var localTarget = Polymer.dom(event).localTarget;
+
+        if (localTarget === parent || localTarget !== this) {
+          this.close();
+          this.$.submenuList.selectIndex(-1);
+        }
+      },
+      _ironSelectHandler: function() {
+        this.__parent.selectIndex(-1);
+        this.$.submenu.classList.add('active');
+      },
+      _ironDeselectHandler: function() {
+        this.$.submenu.classList.remove('active');
+      },
+      _menuTriggerHandler: function(e) {
+        e.stopPropagation();
+        this.$.submenu.toggle();
+
+        this.__parent.items.forEach(function(item) {
+          if (item !== this && item.nodeName === 'APP-SUBMENU' && item.opened) {
+            item.close();
+          }
+        }.bind(this));
+      }
+    });
+  }());
+  </script>
+
+</dom-module>

@@ -1,0 +1,35 @@
+{
+  "name": "app-menu",
+  "version": "0.0.2",
+  "authors": [
+    "Harminder Singh <oyeharminder@gmail.com>"
+  ],
+  "description": "A simple side menu for Apps",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "app-menu",
+    "applications",
+    "menu"
+  ],
+  "main": [
+    "app-menu.html",
+    "app-submenu.html"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.0",
+    "paper-menu": "PolymerElements/paper-menu#^1.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oyeharry/app-menu"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  }
+}
