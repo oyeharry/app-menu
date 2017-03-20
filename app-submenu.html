@@ -133,6 +133,9 @@
       _ironSelectHandler: function() {
         this.__parent.selectIndex(-1);
         this.$.submenu.classList.add('active');
+        if(!this.opened) {
+          this.$.submenu.open();
+        }
       },
       _ironDeselectHandler: function() {
         this.$.submenu.classList.remove('active');
