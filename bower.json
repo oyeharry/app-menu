@@ -1,6 +1,6 @@
 {
   "name": "app-menu",
-  "version": "0.0.4",
+  "version": "2.0.0",
   "authors": [
     "Harminder Singh <oyeharminder@gmail.com>"
   ],
@@ -18,8 +18,12 @@
     "app-submenu.html"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.1.0",
-    "paper-menu": "PolymerElements/paper-menu#^1.2.2"
+    "polymer": "Polymer/polymer#2.0.0-rc.3",
+    "iron-menu-behavior": "PolymerElements/iron-menu-behavior#2.0-preview",
+    "iron-collapse": "PolymerElements/iron-collapse#2.0-preview",
+    "iron-behaviors": "PolymerElements/iron-behaviors#2.0-preview",
+    "iron-icon": "#2.0-preview",
+    "iron-a11y-keys-behavior": "PolymerElements/iron-a11y-keys-behavior#2.0-preview"
   },
   "repository": {
     "type": "git",
@@ -27,9 +31,29 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
-    "web-component-tester": "^4.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+    "iron-component-page": "PolymerElements/iron-component-page#2.0-preview",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#2.0-preview",
+    "web-component-tester": "6.0.0-prerelease.7",
+    "webcomponentsjs": "^v1.0.0-rc.5",
+    "iron-test-helpers": "PolymerElements/iron-test-helpers#2.0-preview"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "Polymer/polymer#^1.1.0",
+        "iron-menu-behavior": "PolymerElements/iron-menu-behavior#^1.0.0",
+        "iron-collapse": "PolymerElements/iron-collapse#^1.3.0",
+        "iron-behaviors": "PolymerElements/iron-behaviors#^1.0.0",
+        "iron-icon": "PolymerElements/iron-icon#^1.0.8",
+        "iron-a11y-keys-behavior": "PolymerElements/iron-a11y-keys-behavior#^1.1.9"
+      },
+      "devDependencies": {
+        "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+        "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.2.5",
+        "web-component-tester": "^4.0.0",
+        "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+        "iron-test-helpers": "PolymerElements/iron-test-helpers#^1.0.0"
+      }
+    }
   }
 }

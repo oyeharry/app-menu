@@ -1,0 +1,35 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+
+<dom-module id="app-menu-icon-item">
+  <template>
+    <style>
+    :host {
+      display: block;
+      color: currentColor;
+      @apply(--app-menu-icon-item-style);
+    }
+    
+    iron-icon {
+      margin-right: 15px;
+    }
+    </style>
+
+
+    <iron-icon icon="[[icon]]"></iron-icon>
+    <slot></slot>
+
+  </template>
+
+  <script>
+  Polymer({
+    is: 'app-menu-icon-item',
+    properties: {
+      icon: {
+        type: String,
+        reflectToAttribute: true
+      }
+    }
+  });
+  </script>
+</dom-module>

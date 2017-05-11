@@ -49,31 +49,32 @@ Custom property | Description | Default
   <template>
     <style include="app-menu-shared-styles"></style>
     <style>
-      :host {
-        display: block;
-        padding: 8px 0;
-
-        background: var(--app-menu-background-color, --primary-background-color);
-        color: var(--app-menu-color, --primary-text-color);
-
-        @apply(--app-menu);
-      }
+    :host {
+      display: block;
+      padding: 8px 0;
+      background: var(--app-menu-background-color, var(--primary-background-color));
+      color: var(--app-menu-color, var(--primary-text-color));
+      @apply(--app-menu);
+    }
     </style>
 
     <div class="selectable-content">
-      <content></content>
+      <slot></slot>
     </div>
   </template>
 
   <script>
-    (function() {
-      Polymer({
-        is: 'app-menu',
+  Polymer({
+    is: 'app-menu',
 
-        behaviors: [
-          Polymer.IronMenuBehavior
-        ]
-      });
-    })();
+    behaviors: [
+      Polymer.IronMenuBehavior
+    ],
+
+    hostAttributes: {
+      role: 'menu'
+    }
+
+  });
   </script>
 </dom-module>
