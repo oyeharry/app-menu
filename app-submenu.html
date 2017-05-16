@@ -1,61 +1,49 @@
-<link rel="import" href="../paper-menu/paper-submenu.html">
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-menu-behavior/iron-menu-behavior.html">
+<link rel="import" href="../iron-behaviors/iron-control-state.html">
+<link rel="import" href="../iron-collapse/iron-collapse.html">
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 
 <link rel="import" href="app-menu-shared-styles.html">
 
 <dom-module id="app-submenu">
-  <style include="app-menu-shared-styles"></style>
-  <!-- scoped CSS for this element -->
-  <style>
-  #submenu .menu-trigger {
-    color: var(--app-menu-color, --primary-text-color);
-    font-weight: 500;
-  }
-  
-  #submenu .menu-trigger .app-menu-icon,
-  #submenu .expand-icon {
-    fill: var(--app-menu-color, --primary-text-color);
-  }
-  
-  #submenu .menu-trigger.iron-selected {
-    background-color: transparent;
-  }
-  
-  #submenu .menu-trigger:hover {
-    background-color: var(--app-menu-selected-bg-color, --primary-background-color);
-  }
-  
-  #submenu.active .menu-trigger {
-    color: var(--primary-color);
-  }
-  
-  #submenu.active .menu-trigger .app-menu-icon {
-    fill: var(--primary-color);
-  }
-  
-  .menu-content >::content app-menu {
-    padding: 0;
-  }
-  </style>
 
   <template>
 
-    <paper-submenu id="submenu" class="submenu" data-wha="{{checkSelection(selectedItem)}}" opened="{{opened}}">
+    <style include="app-menu-shared-styles"></style>
+    <style>
+    :host {
+      display: block;
+    }
+    
+    #collapse ::slotted(app-menu) {
+      padding: 0;
+    }
+    
+    .selectable-content ::slotted(.app-menu-item.iron-selected) {
+      background-color: transparent;
+    }
+    
+    :host(:focus) .selectable-content ::slotted(.app-menu-item) {
+      background-color: var(--app-menu-selected-bg-color, var(--primary-background-color));
+    }
+    
+    .selectable-content ::slotted(.app-menu-item.iron-selected:hover) {
+      background-color: var(--app-menu-selected-bg-color, var(--primary-background-color));
+    }
 
-      <a class="menu-trigger app-menu-item" on-tap="_menuTriggerHandler">
-        <div>
-          <template is="dom-if" if="[[icon]]">
-            <iron-icon icon="[[icon]]" class="app-menu-icon"></iron-icon>
-          </template>
-          <span>[[name]]</span>
-        </div>
-        <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
-      </a>
+    :host([disabled]) .selectable-content ::slotted(.app-menu-item) {
+      color: var(--app-menu-disabled-color, var(--disabled-text-color));
+      pointer-events: none;
+    }
+    </style>
 
-      <div class="menu-content">
-        <content></content>
-      </div>
-
-    </paper-submenu>
+    <div id="triggerHolder" class="selectable-content" on-tap="_onTap">
+      <slot id="trigger" name="submenu-trigger"></slot>
+    </div>
+    <iron-collapse id="collapse" opened="{{opened}}">
+      <slot id="content" name="submenu-content"></slot>
+    </iron-collapse>
 
   </template>
 
@@ -89,67 +77,202 @@
           observer: '_openedChanged'
         }
       },
-      get __appMenu() {
-        return Polymer.dom(this).queryDistributedElements('app-menu')[0];
+
+      behaviors: [
+        Polymer.IronControlState,
+        Polymer.IronA11yKeysBehavior
+      ],
+
+      listeners: {
+        'focus': '_onFocus',
+        'iron-select': '_onIronSelect',
+        'iron-deselect': '_onIronDeselect'
       },
-      ready: function() {
-        this.classList.add('app-submenu');
-        this.$.submenu
-          .addEventListener('iron-select', this._ironSelectHandler.bind(this));
-        this.$.submenu
-          .addEventListener('iron-deselect', this._ironDeselectHandler.bind(this));
-        this._isOpened = false;
+
+      keyBindings: {
+        'enter:keydown': '_asyncClick',
+        'space:keydown': '_spaceKeyDownHandler',
+        'space:keyup': '_spaceKeyUpHandler'
       },
+
       get __parent() {
         return Polymer.dom(this).parentNode;
       },
+
+      get __childNodes() {
+        return Polymer.dom(this.__parent).childNodes;
+      },
+
+      get __trigger() {
+        return Polymer.dom(this.$.trigger).getDistributedNodes()[0];
+      },
+
+      get __content() {
+        return Polymer.dom(this.$.content).getDistributedNodes()[0];
+      },
+
       attached: function() {
         this.listen(this.__parent, 'iron-activate', '_onParentIronActivate');
       },
 
-      detached: function() {
+      dettached: function() {
         this.unlisten(this.__parent, 'iron-activate', '_onParentIronActivate');
       },
-      close: function() {
-        this.$.submenu.close();
+
+      /**
+       * Expand the submenu content.
+       */
+      open: function() {
+        if (!this.disabled) {
+          this.opened = true;
+        }
       },
-      _openedChanged: function(opened, oldOpened) {
+
+      /**
+       * Collapse the submenu content.
+       */
+      close: function() {
+        this.opened = false;
+      },
+
+      /**
+       * Toggle the submenu.
+       */
+      toggle: function() {
+        if (this.opened) {
+          this.close();
+        } else {
+          this.open();
+        }
+      },
+
+      _spaceKeyDownHandler: function(event) {
+        var keyboardEvent = event.detail.keyboardEvent;
+        var target = Polymer.dom(keyboardEvent).localTarget;
+
+        // Ignore the event if this is coming from a focused light child, since that
+        // element will deal with it.
+        if (this.isLightDescendant( /** @type {Node} */ (target)))
+          return;
+
+        keyboardEvent.preventDefault();
+        keyboardEvent.stopImmediatePropagation();
+        this._submenuBtnPressed = true;
+      },
+
+      _spaceKeyUpHandler: function(event) {
+        var keyboardEvent = event.detail.keyboardEvent;
+        var target = Polymer.dom(keyboardEvent).localTarget;
+
+        // Ignore the event if this is coming from a focused light child, since that
+        // element will deal with it.
+        if (this.isLightDescendant( /** @type {Node} */ (target)))
+          return;
+
+        if (this._submenuBtnPressed) {
+          this._asyncClick();
+        }
+        this._submenuBtnPressed = false;
+      },
+
+      _asyncClick: function() {        
+        this.async(function() {
+          this.$.trigger.click();
+        }, 1);
+      },
+
+      /**
+       * A handler that is called when the trigger is tapped.
+       */
+      _onTap: function(e) {
+        e.stopPropagation();
+        if (!this.disabled) {
+          this.toggle();
+
+          this.__childNodes.forEach(function(item) {
+            if (item !== this && item.nodeName === 'APP-SUBMENU' && item.opened) {
+              item.close();
+            }
+          }.bind(this));
+
+        }
+      },
+
+      /**
+       * Toggles the submenu content when the trigger is tapped.
+       */
+      _openedChanged: function(opened, oldOpened) {        
         if (opened) {
+          this.__content && this.__content.focus();          
           this.fire('app-submenu-open');
         } else if (oldOpened != null) {
           this.fire('app-submenu-close');
-        }
+        }        
       },
+
+      /**
+       * A handler that is called when `iron-activate` is fired.
+       *
+       * @param {CustomEvent} event An `iron-activate` event.
+       */
       _onParentIronActivate: function(event) {
         var parent = this.__parent;
+
         var submenuList = Polymer.dom(event).localTarget;
         var localTarget = Polymer.dom(submenuList).parentNode;
 
         if (localTarget === parent || localTarget !== this) {
           this.close();
-          this.__appMenu.selectIndex(-1);
+          this.__content.selectIndex(-1);
         }
       },
-      _ironSelectHandler: function() {
-        this.__parent.selectIndex(-1);
-        this.$.submenu.classList.add('active');
-        if(!this.opened) {
-          this.$.submenu.open();
-        }
-      },
-      _ironDeselectHandler: function() {
-        this.$.submenu.classList.remove('active');
-      },
-      _menuTriggerHandler: function(e) {
-        e.stopPropagation();
-        this.$.submenu.toggle();
 
-        this.__parent.items.forEach(function(item) {
-          if (item !== this && item.nodeName === 'APP-SUBMENU' && item.opened) {
-            item.close();
-          }
-        }.bind(this));
+      /**
+       * If the dropdown is open when disabled becomes true, close the
+       * dropdown.
+       *
+       * @param {boolean} disabled True if disabled, otherwise false.
+       */
+      _disabledChanged: function(disabled) {
+        Polymer.IronControlState._disabledChanged.apply(this, arguments);
+        if (disabled && this.opened) {
+          this.close();
+        }
+      },
+
+      /**
+       * Handler that is called when the menu item is selected
+       * 
+       */
+      _onIronSelect: function() {
+        if (this.__parent.nodeName === 'APP-MENU') {
+          this.__parent.selectIndex(-1);
+        }
+
+        if (!this.opened) {
+          this.open();
+        }
+
+        this.__trigger && this.__trigger.classList.add('iron-selected');
+      },
+
+      /**
+       * Handler that is called when menu item is deselected
+       * 
+       */
+      _onIronDeselect: function() {
+        this.__trigger && this.__trigger.classList.remove('iron-selected');
+      },
+
+      /**
+       * Handler that is called when the menu receives focus.
+       *
+       * @param {FocusEvent} event A focus event.
+       */
+      _onFocus: function(event) {
+        this.__trigger && this.__trigger.focus();
       }
+
     });
   }());
   </script>

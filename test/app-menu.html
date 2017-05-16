@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <title>app-menu tests</title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../app-menu.html">
+
+  <custom-style>
+    <style is="custom-style">
+    html {
+      --app-menu-color: #333;
+      --primary-color: #F62A5A;
+      --app-menu-selected-bg-color: rgba(0, 0, 0, 0.05);
+    }
+    </style>
+  </custom-style>
+
+</head>
+
+<body>
+
+  <test-fixture id="basic">
+    <template>
+      <app-menu selected="0">
+        <a class="app-menu-item">Google</a>
+        <a class="app-menu-item">Facebook</a>
+        <a class="app-menu-item">Twitter</a>
+      </app-menu>
+    </template>
+  </test-fixture>
+
+  <script>
+  describe('<app-menu>', function() {
+    var menu;
+
+    beforeEach(function(done) {
+
+      menu = fixture('basic');
+
+      // Wait for the initial items update.
+      menu.addEventListener('iron-items-changed', function onIronItemsChanged() {
+        menu.removeEventListener('iron-items-changed', onIronItemsChanged);
+        done();
+      });
+    });
+
+    context('basic tests', function() {
+
+      it('should color the selected item with --primary-color', function(done) {
+
+        var colorDivText = document.createElement('div');
+        colorDivText.style.color = menu.getComputedStyleValue('--primary-color');
+        document.body.appendChild(colorDivText);
+        var divColor = getComputedStyle(colorDivText).color
+
+        //because of color trasition
+        setTimeout(function() {
+          var menuColor = getComputedStyle(menu.selectedItem).color;
+          expect(menuColor).to.be.equal(divColor);
+          done();
+        }, 500);
+
+      });
+
+    });
+
+    a11ySuite('basic');
+
+  });
+  </script>
+
+</body>
+
+</html>

@@ -5,12 +5,11 @@
 <dom-module id="app-menu-shared-styles">
   <template>
     <style>
-    /* need a wrapper element to make this higher specificity than the :host rule in paper-item */
-    
-    .selectable-content > ::content .app-menu-item, .app-menu-item {
+    .selectable-content ::slotted(.app-menu-item),
+    .app-menu-item {
       cursor: pointer;
       text-decoration: none;
-      color: var(--app-menu-color, --primary-text-color);
+      color: var(--app-menu-color, var(--primary-text-color));
       transition: color 0.4s ease-out;
       display: flex;
       flex-direction: row;
@@ -25,40 +24,32 @@
       padding: 0 24px;
     }
     
-    .selectable-content > ::content .app-menu-item.iron-selected, .app-menu-item.iron-selected {
+    .selectable-content ::slotted(.app-menu-item.iron-selected),
+    .app-menu-item.iron-selected {
       font-weight: 500;
-      background-color: var(--app-menu-selected-bg-color, --primary-background-color);
+      background-color: var(--app-menu-selected-bg-color, var(--primary-background-color));
       color: var(--primary-color);
       fill: var(--primary-color);
       @apply(--app-menu-selected-item);
     }
     
-    .selectable-content > ::content .app-menu-item:hover {
-      background-color: var(--app-menu-selected-bg-color, --primary-background-color);
+    .selectable-content ::slotted(.app-menu-item:hover),
+    .selectable-content ::slotted(.app-menu-item:focus) {
+      background-color: var(--app-menu-selected-bg-color, var(--primary-background-color));
     }
     
-    .selectable-content > ::content .app-menu-item .app-menu-icon, .app-menu-item .app-menu-icon {
-      margin-right: 15px;
-      fill: var(--app-menu-color, --primary-text-color);
-      transition: fill 0.4s ease-out;
-      @apply(--app-menu-item-icon-style);
+    .selectable-content ::slotted(.app-menu-item[disabled]) {
+      color: var(--app-menu-disabled-color, var(--disabled-text-color));
+      pointer-events: none;
     }
     
-    .selectable-content > ::content .iron-selected .app-menu-icon {
-      fill: var(--primary-color);
-    }
-    
-    .selectable-content > ::content > [disabled] {
-      color: var(--app-menu-disabled-color, --disabled-text-color);
-    }
-    
-    .selectable-content > ::content > *:focus {
+    .selectable-content ::slotted(:focus) {
       position: relative;
       outline: 0;
       @apply(--app-menu-focused-item);
     }
     
-    .selectable-content > ::content > *:focus:after {
+    .selectable-content ::slotted(.app-menu-item:focus:after) {
       @apply(--layout-fit);
       opacity: var(--dark-divider-opacity);
       content: '';
@@ -66,7 +57,7 @@
       @apply(--app-menu-focused-item-after);
     }
     
-    .selectable-content > ::content > *[colored]:focus:after {
+    .selectable-content ::slotted(.app-menu-item[colored]:focus:after) {
       opacity: 0.26;
     }
     </style>

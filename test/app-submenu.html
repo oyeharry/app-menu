@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <title>app-submenu tests</title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../app-menu.html">
+  <link rel="import" href="../app-submenu.html">
+  <link rel="import" href="../app-menu-icon-item.html">
+
+  <custom-style>
+    <style is="custom-style">
+    html {
+      --app-menu-color: #333;
+      --primary-color: #F62A5A;
+      --app-menu-selected-bg-color: rgba(0, 0, 0, 0.05);
+    }
+    </style>
+  </custom-style>
+
+</head>
+
+<body>
+
+  <test-fixture id="basic">
+    <template>
+      <app-menu selected="0">
+
+        <a class="app-menu-item" href="#">
+          <app-menu-icon-item icon="icons:chrome-reader-mode">News</app-menu-icon-item>
+        </a>
+
+        <app-submenu>
+          <div class="app-menu-item" slot="submenu-trigger">
+            <app-menu-icon-item icon="icons:account-balance">Accounts</app-menu-icon-item>
+            <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
+          </div>
+          <app-menu slot="submenu-content">
+            <a class="app-menu-item">Google</a>
+            <a class="app-menu-item">Facebook</a>
+            <a class="app-menu-item">Twitter</a>
+          </app-menu>
+        </app-submenu>
+
+        <a class="app-menu-item" href="#">
+          <app-menu-icon-item icon="icons:account-box">Profile</app-menu-icon-item>
+        </a>
+
+        <a class="app-menu-item" href="#">
+          <app-menu-icon-item icon="icons:view-module">Collections</app-menu-icon-item>
+        </a>
+
+        <app-submenu>
+          <div class="app-menu-item" slot="submenu-trigger">
+            <app-menu-icon-item icon="chrome-reader-mode">Contacts</app-menu-icon-item>
+            <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
+          </div>
+          <app-menu slot="submenu-content">
+            <a class="app-menu-item">John</a>
+            <a class="app-menu-item">Harry</a>
+          </app-menu>
+        </app-submenu>
+
+        <a class="app-menu-item" href="#">
+          <app-menu-icon-item icon="icons:build">Setting</app-menu-icon-item>
+        </a>
+
+      </app-menu>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="opened">
+    <template>
+      <app-menu>
+        <app-submenu opened>
+          <div class="app-menu-item" slot="submenu-trigger">
+            <app-menu-icon-item icon="chrome-reader-mode">Opened Submenu</app-menu-icon-item>
+            <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
+          </div>
+          <app-menu slot="submenu-content">
+            <a class="app-menu-item">Yeah Open 1</a>
+            <a class="app-menu-item">Yeah Open 2</a>
+          </app-menu>
+        </app-submenu>
+      </app-menu>
+    </template>
+  </test-fixture>
+
+  <script>
+  describe('<app-submenu>', function() {
+    var menu;
+    var submenu1;
+    var submenu2;
+    var trigger1;
+    var trigger2;
+    var trigger2;
+    var trigger2;
+    var normalDivColor;
+    var colorDivColor;
+
+    beforeEach(function(done) {
+
+      menu = fixture('basic');
+      submenu1 = menu.querySelectorAll('app-submenu')[0];
+      submenu2 = menu.querySelectorAll('app-submenu')[1];
+
+      collapse1 = Polymer.dom(submenu1.root).querySelector('iron-collapse');
+      collapse2 = Polymer.dom(submenu2.root).querySelector('iron-collapse');
+
+      trigger1 = submenu1.querySelector('[slot="submenu-trigger"]');
+      trigger2 = submenu2.querySelector('[slot="submenu-trigger"]');
+
+      var normalDivText = document.createElement('div');
+      normalDivText.style.color = menu.getComputedStyleValue('--app-menu-color');
+      document.body.appendChild(normalDivText);
+      normalDivColor = getComputedStyle(normalDivText).color
+
+      var colorDivText = document.createElement('div');
+      colorDivText.style.color = menu.getComputedStyleValue('--primary-color');
+      document.body.appendChild(colorDivText);
+      colorDivColor = getComputedStyle(colorDivText).color
+
+      done();
+    });
+
+    context('basic tests', function() {
+
+      it('should expands the selected submenu', function() {
+        expect(collapse1.opened).to.be.false;
+        expect(collapse2.opened).to.be.false;
+
+        MockInteractions.tap(trigger1);
+
+        expect(collapse1.opened).to.be.true;
+        expect(collapse2.opened).to.be.false;
+      });
+
+      it('should close the expanded submenu when select selecting other submenu', function() {
+        expect(collapse1.opened).to.be.false;
+        expect(collapse2.opened).to.be.false;
+
+        MockInteractions.tap(trigger1);
+
+        expect(collapse1.opened).to.be.true;
+        expect(collapse2.opened).to.be.false;
+
+        MockInteractions.tap(trigger2);
+
+        expect(collapse1.opened).to.be.false;
+        expect(collapse2.opened).to.be.true;
+
+      });
+
+      it('should style the submenu trigger when selecting submenu item', function(done) {
+        this.timeout(9500);
+
+        var submenuItem1 = submenu1
+          .querySelector('[slot="submenu-content"]').querySelector('.app-menu-item');
+
+        MockInteractions.tap(trigger1);
+
+        //because of color trasition
+        setTimeout(function() {
+          expect(getComputedStyle(submenuItem1).color).to.be.equal(normalDivColor);
+          MockInteractions.tap(submenuItem1);
+        }, 3000);
+
+        //because of color trasition
+        setTimeout(function() {
+          expect(getComputedStyle(trigger1).color).to.be.equal(colorDivColor);
+          expect(getComputedStyle(submenuItem1).color).to.be.equal(colorDivColor);
+          done();
+        }, 6000);
+
+      });
+
+      it('should de-style the last selected submenu item when selecting new submenu item',
+        function(done) {
+          this.timeout(2000);
+
+          var submenu1Item1 = submenu1
+            .querySelector('[slot="submenu-content"]').querySelector('.app-menu-item');
+          var submenu2Item1 = submenu2
+            .querySelector('[slot="submenu-content"]').querySelector('.app-menu-item');
+
+          MockInteractions.tap(trigger1);
+          MockInteractions.tap(submenu1Item1);
+
+          setTimeout(function() {
+            MockInteractions.tap(trigger2);
+            MockInteractions.tap(submenu2Item1);
+          }, 500);
+
+          //because of color trasition
+          setTimeout(function() {
+            expect(getComputedStyle(trigger1).color).to.be.equal(normalDivColor);
+            expect(getComputedStyle(submenu1Item1).color).to.be.equal(normalDivColor);
+
+            expect(getComputedStyle(trigger2).color).to.be.equal(colorDivColor);
+            expect(getComputedStyle(submenu2Item1).color).to.be.equal(colorDivColor);
+            done();
+          }, 1500);
+
+        });
+
+      it('should de-style and close the last selected submenu item ' +
+        'when selecting parent menu item',
+        function(done) {
+          this.timeout(4000);
+
+          var submenu1Item1 = submenu1
+            .querySelector('[slot="submenu-content"]').querySelector('.app-menu-item');
+          var parentMenuItem1 = menu.querySelector('.app-menu-item');
+
+          MockInteractions.tap(trigger1);
+          setTimeout(function() {
+            MockInteractions.tap(submenu1Item1);
+          }, 500);
+
+          setTimeout(function() {
+            MockInteractions.tap(parentMenuItem1);
+          }, 1000);
+
+          //because of color trasition
+          setTimeout(function() {
+            expect(getComputedStyle(trigger1).color).to.be.equal(normalDivColor);
+            expect(getComputedStyle(submenu1Item1).color).to.be.equal(normalDivColor);
+            expect(collapse1.opened).to.be.false;
+
+            expect(getComputedStyle(parentMenuItem1).color).to.be.equal(colorDivColor);
+            done();
+          }, 2000);
+
+        });
+
+    });
+
+  });
+
+  describe('<app-submenu opened>', function() {
+    var opened;
+    var submenu;
+    var collapse;
+    var trigger;
+
+    beforeEach(function(done) {
+
+      opened = fixture('opened');
+      submenu = opened.querySelector('app-submenu');
+      collapse = Polymer.dom(submenu.root).querySelector('iron-collapse');
+      trigger = submenu.querySelector('[slot="submenu-trigger"]');
+
+      done();
+    });
+
+    context('Submenu API Test', function() {
+
+      it('should be opened initially and should be close on trigger tap', function() {
+
+        expect(submenu.opened).to.be.true;
+
+        MockInteractions.tap(trigger);
+        expect(submenu.opened).to.be.false;
+
+        MockInteractions.tap(trigger);
+        expect(submenu.opened).to.be.true;
+
+      });
+
+      it('should open/close on open()/close() function', function() {
+
+        expect(submenu.opened).to.be.true;
+
+        submenu.close();
+        expect(submenu.opened).to.be.false;
+        expect(collapse.opened).to.be.false;
+
+        submenu.open();
+        expect(submenu.opened).to.be.true;
+        expect(collapse.opened).to.be.true;
+      });
+
+      it('should open/close on toggle() function', function() {
+
+        expect(submenu.opened).to.be.true;
+
+        submenu.toggle();
+        expect(submenu.opened).to.be.false;
+        expect(collapse.opened).to.be.false;
+
+        submenu.toggle();
+        expect(submenu.opened).to.be.true;
+        expect(collapse.opened).to.be.true;
+      });
+
+    });
+
+    a11ySuite('basic');
+    a11ySuite('opened');
+
+  });
+  </script>
+
+</body>
+
+</html>

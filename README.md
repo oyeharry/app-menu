@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/oyeharry/app-menu.svg?branch=master)](https://travis-ci.org/oyeharry/app-menu)
+
 # \<app-menu\>
 
 A simple side menu for App
