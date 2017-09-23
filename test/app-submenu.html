@@ -126,6 +126,27 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="noAutoCloseOnDeactivate">
+    <template>
+      <app-menu>
+        <a class="app-menu-item" href="#">
+          <app-menu-icon-item icon="icons:chrome-reader-mode">News</app-menu-icon-item>
+        </a>
+        <app-submenu no-auto-close-on-deactivate>
+          <div class="app-menu-item" slot="submenu-trigger">
+            <app-menu-icon-item icon="chrome-reader-mode">NoAutoClose</app-menu-icon-item>
+            <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
+          </div>
+          <app-menu slot="submenu-content">
+            <a class="app-menu-item">Yeah Open 1</a>
+            <a class="app-menu-item">Yeah Open 2</a>
+          </app-menu>
+        </app-submenu>
+      </app-menu>
+    </template>
+  </test-fixture>
+
+
   <script>
   describe('<app-submenu>', function() {
     var menu;
@@ -345,8 +366,6 @@
     var noAutoCloseMenu;
     var submenu1;
     var submenu2;
-    var collapse1;
-    var collapse2;
     var trigger1;
     var trigger2;
 
@@ -356,20 +375,17 @@
       submenu1 = noAutoCloseMenu.querySelectorAll('app-submenu')[0];
       submenu2 = noAutoCloseMenu.querySelectorAll('app-submenu')[1];
 
-      collapse1 = Polymer.dom(submenu1.root).querySelector('iron-collapse');
-      collapse2 = Polymer.dom(submenu2.root).querySelector('iron-collapse');
-
       trigger1 = submenu1.querySelector('[slot="submenu-trigger"]');
       trigger2 = submenu2.querySelector('[slot="submenu-trigger"]');
 
       done();
     });
 
-    context('Submenu Auto Close Test', function() {
+    context('Submenu No Auto Close Test', function() {
 
-      it('should not auto close menu on parent selection', function() {
+      it('should not auto close menu on parent selection', function(done) {
 
-        this.timeout(2000);
+        this.timeout(2500);
 
         var parentMenuItem1 = noAutoCloseMenu.querySelector('.app-menu-item');
 
@@ -393,9 +409,9 @@
 
       });
 
-      it('should not auto close menu on second submenu selection', function() {
+      it('should not auto close menu on second submenu selection', function(done) {
 
-        this.timeout(2500);
+        this.timeout(3000);
 
         var submenu1Item1 = submenu1
           .querySelector('[slot="submenu-content"]').querySelector('.app-menu-item');
@@ -404,7 +420,7 @@
 
         expect(submenu1.opened).to.be.false;
         expect(submenu2.opened).to.be.false;
-        
+
         MockInteractions.tap(trigger1);
         MockInteractions.tap(submenu1Item1);
         MockInteractions.tap(trigger2);
@@ -417,6 +433,55 @@
         setTimeout(function() {
           expect(submenu1.opened).to.be.true;
           expect(submenu2.opened).to.be.true;
+          done();
+        }, 2000);
+
+      });
+
+    });
+
+  });
+
+  describe('<app-submenu no-auto-close-on-deactivate>', function() {
+
+    var menu;
+    var submenu;
+    var trigger;
+
+    beforeEach(function(done) {
+
+      menu = fixture('noAutoCloseOnDeactivate');
+      submenu = menu.querySelector('app-submenu');
+
+      trigger = submenu.querySelector('[slot="submenu-trigger"]');
+
+      done();
+    });
+
+    context('Submenu No Auto Close on Deactivate Test', function() {
+
+      it('should not auto close on deactivate', function(done) {
+
+        this.timeout(3000);
+
+        var parentMenuItem = menu.querySelector('.app-menu-item');
+
+        var submenuItem = submenu
+          .querySelector('[slot="submenu-content"]')
+          .querySelector('.app-menu-item');
+
+        MockInteractions.tap(trigger);
+        MockInteractions.tap(submenuItem);
+
+        expect(submenu.opened).to.be.true;
+
+        setTimeout(function() {
+          MockInteractions.tap(parentMenuItem);
+        }, 500);
+
+        //because of color trasition
+        setTimeout(function() {
+          expect(submenu.opened).to.be.true;
           done();
         }, 2000);
 
