@@ -24,6 +24,7 @@
       --primary-color: #F62A5A;
       --app-menu-selected-bg-color: rgba(0, 0, 0, 0.05);
     }
+
     </style>
   </custom-style>
 
@@ -84,6 +85,36 @@
         <app-submenu opened>
           <div class="app-menu-item" slot="submenu-trigger">
             <app-menu-icon-item icon="chrome-reader-mode">Opened Submenu</app-menu-icon-item>
+            <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
+          </div>
+          <app-menu slot="submenu-content">
+            <a class="app-menu-item">Yeah Open 1</a>
+            <a class="app-menu-item">Yeah Open 2</a>
+          </app-menu>
+        </app-submenu>
+      </app-menu>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="noAutoClose">
+    <template>
+      <app-menu>
+        <a class="app-menu-item" href="#">
+          <app-menu-icon-item icon="icons:chrome-reader-mode">News</app-menu-icon-item>
+        </a>
+        <app-submenu no-auto-close>
+          <div class="app-menu-item" slot="submenu-trigger">
+            <app-menu-icon-item icon="chrome-reader-mode">NoAutoClose</app-menu-icon-item>
+            <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
+          </div>
+          <app-menu slot="submenu-content">
+            <a class="app-menu-item">Yeah Open 1</a>
+            <a class="app-menu-item">Yeah Open 2</a>
+          </app-menu>
+        </app-submenu>
+        <app-submenu no-auto-close>
+          <div class="app-menu-item" slot="submenu-trigger">
+            <app-menu-icon-item icon="chrome-reader-mode">NoAutoClose</app-menu-icon-item>
             <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
           </div>
           <app-menu slot="submenu-content">
@@ -308,6 +339,93 @@
     a11ySuite('opened');
 
   });
+
+  describe('<app-submenu no-auto-close>', function() {
+
+    var noAutoCloseMenu;
+    var submenu1;
+    var submenu2;
+    var collapse1;
+    var collapse2;
+    var trigger1;
+    var trigger2;
+
+    beforeEach(function(done) {
+
+      noAutoCloseMenu = fixture('noAutoClose');
+      submenu1 = noAutoCloseMenu.querySelectorAll('app-submenu')[0];
+      submenu2 = noAutoCloseMenu.querySelectorAll('app-submenu')[1];
+
+      collapse1 = Polymer.dom(submenu1.root).querySelector('iron-collapse');
+      collapse2 = Polymer.dom(submenu2.root).querySelector('iron-collapse');
+
+      trigger1 = submenu1.querySelector('[slot="submenu-trigger"]');
+      trigger2 = submenu2.querySelector('[slot="submenu-trigger"]');
+
+      done();
+    });
+
+    context('Submenu Auto Close Test', function() {
+
+      it('should not auto close menu on parent selection', function() {
+
+        this.timeout(2000);
+
+        var parentMenuItem1 = noAutoCloseMenu.querySelector('.app-menu-item');
+
+        var submenu1Item1 = submenu1
+          .querySelector('[slot="submenu-content"]').querySelector('.app-menu-item');
+
+        MockInteractions.tap(trigger1);
+        MockInteractions.tap(submenu1Item1);
+
+        expect(submenu1.opened).to.be.true;
+
+        setTimeout(function() {
+          MockInteractions.tap(parentMenuItem1);
+        }, 500);
+
+        //because of color trasition
+        setTimeout(function() {
+          expect(submenu1.opened).to.be.true;
+          done();
+        }, 2000);
+
+      });
+
+      it('should not auto close menu on second submenu selection', function() {
+
+        this.timeout(2500);
+
+        var submenu1Item1 = submenu1
+          .querySelector('[slot="submenu-content"]').querySelector('.app-menu-item');
+        var submenu2Item1 = submenu2
+          .querySelector('[slot="submenu-content"]').querySelector('.app-menu-item');
+
+        expect(submenu1.opened).to.be.false;
+        expect(submenu2.opened).to.be.false;
+        
+        MockInteractions.tap(trigger1);
+        MockInteractions.tap(submenu1Item1);
+        MockInteractions.tap(trigger2);
+
+        setTimeout(function() {
+          MockInteractions.tap(submenu2Item1);
+        }, 500);
+
+        //because of color trasition
+        setTimeout(function() {
+          expect(submenu1.opened).to.be.true;
+          expect(submenu2.opened).to.be.true;
+          done();
+        }, 2000);
+
+      });
+
+    });
+
+  });
+
   </script>
 
 </body>
