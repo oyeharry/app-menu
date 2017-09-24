@@ -12,30 +12,31 @@
 
     <style include="app-menu-shared-styles"></style>
     <style>
-    :host {
+     :host {
       display: block;
     }
-    
+
     #collapse ::slotted(app-menu) {
       padding: 0;
     }
-    
+
     .selectable-content ::slotted(.app-menu-item.iron-selected) {
       background-color: transparent;
     }
-    
-    :host(:focus) .selectable-content ::slotted(.app-menu-item) {
+
+     :host(:focus) .selectable-content ::slotted(.app-menu-item) {
       background-color: var(--app-menu-selected-bg-color, var(--primary-background-color));
     }
-    
+
     .selectable-content ::slotted(.app-menu-item.iron-selected:hover) {
       background-color: var(--app-menu-selected-bg-color, var(--primary-background-color));
     }
 
-    :host([disabled]) .selectable-content ::slotted(.app-menu-item) {
+     :host([disabled]) .selectable-content ::slotted(.app-menu-item) {
       color: var(--app-menu-disabled-color, var(--disabled-text-color));
       pointer-events: none;
     }
+
     </style>
 
     <div id="triggerHolder" class="selectable-content" on-tap="_onTap">
@@ -75,6 +76,27 @@
           value: false,
           notify: true,
           observer: '_openedChanged'
+        },
+
+        /**
+         * Set noAutoClose to true to prevent submenu from auto closing.
+         * 
+         * @attribute noAutoClose
+         */
+        noAutoClose: {
+          type: Boolean,
+          value: false,
+          observer: '_closeOthers'
+        },
+
+        /**
+         * Set noAutoClose to true to prevent submenu from closing when its deactivated.
+         * 
+         * @attribute noAutoClose
+         */
+        noAutoCloseOnDeactivate: {
+          type: Boolean,
+          value: false
         }
       },
 
@@ -175,10 +197,20 @@
         this._submenuBtnPressed = false;
       },
 
-      _asyncClick: function() {        
+      _asyncClick: function() {
         this.async(function() {
           this.$.trigger.click();
         }, 1);
+      },
+
+      _closeOthers: function() {
+        if (!this.noAutoClose) {
+          this.__childNodes.forEach(function(item) {
+            if (item !== this && item.nodeName === 'APP-SUBMENU' && item.opened) {
+              item.close();
+            }
+          }.bind(this));
+        }
       },
 
       /**
@@ -188,26 +220,20 @@
         e.stopPropagation();
         if (!this.disabled) {
           this.toggle();
-
-          this.__childNodes.forEach(function(item) {
-            if (item !== this && item.nodeName === 'APP-SUBMENU' && item.opened) {
-              item.close();
-            }
-          }.bind(this));
-
+          this._closeOthers();
         }
       },
 
       /**
        * Toggles the submenu content when the trigger is tapped.
        */
-      _openedChanged: function(opened, oldOpened) {        
+      _openedChanged: function(opened, oldOpened) {
         if (opened) {
-          this.__content && this.__content.focus();          
+          this.__content && this.__content.focus();
           this.fire('app-submenu-open');
         } else if (oldOpened != null) {
           this.fire('app-submenu-close');
-        }        
+        }
       },
 
       /**
@@ -222,7 +248,9 @@
         var localTarget = Polymer.dom(submenuList).parentNode;
 
         if (localTarget === parent || localTarget !== this) {
-          this.close();
+          if (!this.noAutoCloseOnDeactivate && !this.noAutoClose) {
+            this.close();
+          }
           this.__content.selectIndex(-1);
         }
       },
@@ -275,6 +303,7 @@
 
     });
   }());
+
   </script>
 
 </dom-module>
