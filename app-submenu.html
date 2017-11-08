@@ -229,7 +229,6 @@
        */
       _openedChanged: function(opened, oldOpened) {
         if (opened) {
-          this.__content && this.__content.focus();
           this.fire('app-submenu-open');
         } else if (oldOpened != null) {
           this.fire('app-submenu-close');
