@@ -13,7 +13,6 @@ before_script:
 - npm install -g polymer-cli
 - polymer install --variants
 script:
-- "travis_wait 30 sleep 1800 &"
 - xvfb-run polymer test
 - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then polymer test -s 'default'; fi
 env:
