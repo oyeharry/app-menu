@@ -1,10 +1,10 @@
 [![Build Status](https://travis-ci.org/oyeharry/app-menu.svg?branch=master)](https://travis-ci.org/oyeharry/app-menu)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/oyeharry/app-menu)
 
-# \<app-menu\>
-
+# <app-menu\>
 A simple side menu for App
 
-##&lt;app-menu&gt;
+## &lt;app-menu&gt;
 
 Material design: [Menus](https://www.google.com/design/spec/components/menus.html)
 
