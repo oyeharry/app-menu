@@ -13,11 +13,22 @@
   <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
   <link rel="import" href="../../iron-icon/iron-icon.html">
-  <link rel="import" href="../app-menu.html">
-  <link rel="import" href="../app-submenu.html">
-  <link rel="import" href="../app-menu-icon-item.html">
+  <script type="module" src="../app-menu.js"></script>
+  <script type="module" src="../app-submenu.js"></script>
+  <script type="module" src="../app-menu-icon-item.js"></script>
 
-  <custom-style>
+  <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('div');
+
+$_documentContainer.innerHTML = `<custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
     html {
       --app-menu-color: #616161;
@@ -29,11 +40,17 @@
       max-width: 500px;
     }
     </style>
-  </custom-style>
+  </custom-style>`;
+
+document.body.appendChild($_documentContainer);
+</script>
 </head>
 
 <body unresolved>
-  <div class="vertical-section-container centered">
+  <script type="module">
+const $_documentContainer = document.createElement('div');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
     <h3>Basic app-menu demo</h3>
     <demo-snippet>
       <template>
@@ -78,7 +95,7 @@
             <app-menu-icon-item icon="icons:build">Setting</app-menu-icon-item>
           </a>
 
-          <app-submenu disabled>
+          <app-submenu disabled="">
             <div class="app-menu-item" slot="submenu-trigger">
               <app-menu-icon-item icon="icons:error">Disabled Submenu</app-menu-icon-item>
               <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
@@ -89,14 +106,17 @@
             </app-menu>
           </app-submenu>
 
-          <a class="app-menu-item" href="javascript:void(0)" disabled>
+          <a class="app-menu-item" href="javascript:void(0)" disabled="">
             <app-menu-icon-item icon="icons:face">Disabled</app-menu-icon-item>
           </a>
 
         </app-menu>
       </template>
     </demo-snippet>
-  </div>
+  </div>`;
+
+document.body.appendChild($_documentContainer);
+</script>
 </body>
 
 </html>

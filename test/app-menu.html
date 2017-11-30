@@ -12,7 +12,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <script src="../../web-component-tester/browser.js"></script>
-  <link rel="import" href="../app-menu.html">
+  <script type="module" src="../app-menu.js"></script>
 
   <custom-style>
     <style is="custom-style">
@@ -38,45 +38,46 @@
     </template>
   </test-fixture>
 
-  <script>
-  describe('<app-menu>', function() {
-    var menu;
+  <script type="module">
+import '../app-menu.js';
+describe('<app-menu>', function() {
+  var menu;
 
-    beforeEach(function(done) {
+  beforeEach(function(done) {
 
-      menu = fixture('basic');
+    menu = fixture('basic');
 
-      // Wait for the initial items update.
-      menu.addEventListener('iron-items-changed', function onIronItemsChanged() {
-        menu.removeEventListener('iron-items-changed', onIronItemsChanged);
+    // Wait for the initial items update.
+    menu.addEventListener('iron-items-changed', function onIronItemsChanged() {
+      menu.removeEventListener('iron-items-changed', onIronItemsChanged);
+      done();
+    });
+  });
+
+  context('basic tests', function() {
+
+    it('should color the selected item with --primary-color', function(done) {
+
+      var colorDivText = document.createElement('div');
+      colorDivText.style.color = menu.getComputedStyleValue('--primary-color');
+      document.body.appendChild(colorDivText);
+      var divColor = getComputedStyle(colorDivText).color
+
+      //because of color trasition
+      setTimeout(function() {
+        var menuColor = getComputedStyle(menu.selectedItem).color;
+        expect(menuColor).to.be.equal(divColor);
         done();
-      });
-    });
-
-    context('basic tests', function() {
-
-      it('should color the selected item with --primary-color', function(done) {
-
-        var colorDivText = document.createElement('div');
-        colorDivText.style.color = menu.getComputedStyleValue('--primary-color');
-        document.body.appendChild(colorDivText);
-        var divColor = getComputedStyle(colorDivText).color
-
-        //because of color trasition
-        setTimeout(function() {
-          var menuColor = getComputedStyle(menu.selectedItem).color;
-          expect(menuColor).to.be.equal(divColor);
-          done();
-        }, 500);
-
-      });
+      }, 500);
 
     });
-
-    a11ySuite('basic');
 
   });
-  </script>
+
+  a11ySuite('basic');
+
+});
+</script>
 
 </body>
 

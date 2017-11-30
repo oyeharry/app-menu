@@ -1,9 +1,5 @@
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-menu-behavior/iron-menu-behavior.html">
-<link rel="import" href="../paper-styles/default-theme.html">
-
-<link rel="import" href="app-menu-shared-styles.html">
-<!--
+import './app-menu-shared-styles.js';
+/**
 Material design: [Menus](https://www.google.com/design/spec/components/menus.html)
 
 `<app-menu>` implements an accessible menu control with Material Design styling. The focused item
@@ -43,10 +39,9 @@ Custom property | Description | Default
 @group App Elements
 @element app-menu
 @demo demo/index.html
--->
-
-<dom-module id="app-menu">
-  <template>
+*/
+Polymer({
+  _template: `
     <style include="app-menu-shared-styles"></style>
     <style>
     :host {
@@ -61,20 +56,15 @@ Custom property | Description | Default
     <div class="selectable-content">
       <slot></slot>
     </div>
-  </template>
+`,
 
-  <script>
-  Polymer({
-    is: 'app-menu',
+  is: 'app-menu',
 
-    behaviors: [
-      Polymer.IronMenuBehavior
-    ],
+  behaviors: [
+    Polymer.IronMenuBehavior
+  ],
 
-    hostAttributes: {
-      role: 'menu'
-    }
-
-  });
-  </script>
-</dom-module>
+  hostAttributes: {
+    role: 'menu'
+  }
+});

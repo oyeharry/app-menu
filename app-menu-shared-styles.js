@@ -1,8 +1,7 @@
-<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../paper-styles/color.html">
-<link rel="import" href="../paper-styles/default-theme.html">
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
 
-<dom-module id="app-menu-shared-styles">
+$_documentContainer.innerHTML = `<dom-module id="app-menu-shared-styles">
   <template>
     <style>
     .selectable-content ::slotted(.app-menu-item),
@@ -62,4 +61,6 @@
     }
     </style>
   </template>
-</dom-module>
+</dom-module>`;
+
+document.head.appendChild($_documentContainer);
