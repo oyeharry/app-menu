@@ -60,9 +60,7 @@ Polymer({
 
   is: 'app-menu',
 
-  behaviors: [
-    Polymer.IronMenuBehavior
-  ],
+  behaviors: [Polymer.IronMenuBehavior],
 
   hostAttributes: {
     role: 'menu'

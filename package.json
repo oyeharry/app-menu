@@ -3,9 +3,7 @@
   "flat": true,
   "version": "3.0.0-pre.1",
   "description": "A simple side menu for Apps",
-  "contributors": [
-    "Harminder Singh <oyeharminder@gmail.com>"
-  ],
+  "contributors": ["Harminder Singh <oyeharminder@gmail.com>"],
   "keywords": [
     "web-component",
     "web-components",
@@ -20,12 +18,14 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@polymer/polymer": "^3.0.0-pre.1",
-    "@polymer/iron-menu-behavior": "^3.0.0-pre.1",
-    "@polymer/iron-collapse": "^3.0.0-pre.1",
+    "@polymer/iron-a11y-keys-behavior": "^3.0.0-pre.1",
     "@polymer/iron-behaviors": "^3.0.0-pre.1",
+    "@polymer/iron-collapse": "^3.0.0-pre.1",
     "@polymer/iron-icon": "^3.0.0-pre.1",
-    "@polymer/iron-a11y-keys-behavior": "^3.0.0-pre.1"
+    "@polymer/iron-menu-behavior": "^3.0.0-pre.1",
+    "@polymer/polymer": "^3.0.0-pre.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@polymer/iron-component-page": "^3.0.0-pre.1"
+  }
 }
