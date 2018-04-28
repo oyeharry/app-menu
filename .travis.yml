@@ -8,7 +8,7 @@ addons:
     packages:
     - google-chrome-stable
 language: node_js
-node_js: stable
+node_js: 8
 before_script:
 - npm install -g polymer-cli
 - polymer install --variants
