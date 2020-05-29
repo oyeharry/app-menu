@@ -1,5 +1,8 @@
+import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '@polymer/polymer/polymer-legacy.js';
+
 Polymer({
-  _template: `
+  _template: html`
     <style>
     :host {
       display: block;

@@ -1,3 +1,8 @@
+import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '@polymer/polymer/polymer-legacy.js';
+
+import { IronMenuBehavior } from '@polymer/iron-menu-behavior/iron-menu-behavior.js';
+
 import './app-menu-shared-styles.js';
 /**
 Material design: [Menus](https://www.google.com/design/spec/components/menus.html)
@@ -41,28 +46,28 @@ Custom property | Description | Default
 @demo demo/index.html
 */
 Polymer({
-  _template: `
+  _template: html`
     <style include="app-menu-shared-styles"></style>
     <style>
-    :host {
-      display: block;
-      padding: 8px 0;
-      background: var(--app-menu-background-color, var(--primary-background-color));
-      color: var(--app-menu-color, var(--primary-text-color));
-      @apply(--app-menu);
-    }
+      :host {
+        display: block;
+        padding: 8px 0;
+        background: var(--app-menu-background-color, var(--primary-background-color));
+        color: var(--app-menu-color, var(--primary-text-color));
+        @apply(--app-menu);
+      }
     </style>
 
     <div class="selectable-content">
       <slot></slot>
     </div>
-`,
+  `,
 
   is: 'app-menu',
 
-  behaviors: [Polymer.IronMenuBehavior],
+  behaviors: [IronMenuBehavior],
 
   hostAttributes: {
-    role: 'menu'
-  }
+    role: 'menu',
+  },
 });

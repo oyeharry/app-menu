@@ -6,39 +6,77 @@ A simple side menu for App
 
 ##&lt;app-menu&gt;
 
-Material design: [Menus](https://www.google.com/design/spec/components/menus.html)
+## Usage
 
-<!---
-```
-<custom-element-demo>
-  <template>
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-   
-    <link rel="import" href="app-menu.html">
+### Installation
 
-    <style is="custom-style">
-		body {
-	    font-family: 'Roboto', 'Noto', sans-serif;
-	    font-size: 14px;
-	    margin: 0;
-	    padding: 24px;
-	    background-color: #fafafa;
-	  }
-	  app-menu {
-			--app-menu-color: #616161;
-			--primary-color: #F62A5A;
-			--app-menu-selected-bg-color: rgba(0, 0, 0, 0.05);
-		}
-	</style>
-    <next-code-block></next-code-block>
-  </template>
-</custom-element-demo>
 ```
--->
+npm install --save app-menu
+```
+
+### In an html file
+
 ```html
-<app-menu selected="0">
-  <a href="#" class="app-menu-item">Item 1</a>
-  <a href="#" class="app-menu-item">Item 2</a>
-  <a href="#" class="app-menu-item">Item 3</a>
-</app-menu>
+<html>
+  <head>
+    <script type="module">
+      import '@oyeharry/app-menu/app-menu.js';
+    </script>
+  </head>
+  <app-menu selected="0">
+    <a href="#" class="app-menu-item">Item 1</a>
+    <a href="#" class="app-menu-item">Item 2</a>
+    <a href="#" class="app-menu-item">Item 3</a>
+  </app-menu>
+</html>
+```
+
+### In a Polymer 3 element
+
+```js
+import { PolymerElement, html } from '@polymer/polymer';
+import '@oyeharry/app-menu/app-menu.js';
+
+class SampleMenuElement extends PolymerElement {
+  static get template() {
+    return html`
+      <style is="custom-style">
+        app-menu {
+          --app-menu-color: #616161;
+          --primary-color: #f62a5a;
+          --app-menu-selected-bg-color: rgba(0, 0, 0, 0.05);
+        }
+      </style>
+
+      <app-menu selected="0">
+        <a href="#" class="app-menu-item">Item 1</a>
+        <a href="#" class="app-menu-item">Item 2</a>
+        <a href="#" class="app-menu-item">Item 3</a>
+      </app-menu>
+    `;
+  }
+}
+customElements.define('sample-element', SampleMenuElement);
+```
+
+### Installation
+
+```sh
+git clone https://github.com/app-menu
+cd app-menu
+npm install
+npm install -g polymer-cli
+```
+
+### Running the demo locally
+
+```sh
+polymer serve --npm
+open http://127.0.0.1:<port>/demo/
+```
+
+### Running the tests
+
+```sh
+polymer test --npm
 ```

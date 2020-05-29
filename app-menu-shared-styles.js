@@ -1,7 +1,7 @@
-const $_documentContainer = document.createElement('div');
-$_documentContainer.setAttribute('style', 'display: none;');
+import '@polymer/polymer/polymer-legacy.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
-$_documentContainer.innerHTML = `<dom-module id="app-menu-shared-styles">
+const template = html`<dom-module id="app-menu-shared-styles">
   <template>
     <style>
     .selectable-content ::slotted(.app-menu-item),
@@ -63,4 +63,5 @@ $_documentContainer.innerHTML = `<dom-module id="app-menu-shared-styles">
   </template>
 </dom-module>`;
 
-document.head.appendChild($_documentContainer);
+template.setAttribute('style', 'display: none;');
+document.head.appendChild(template.content);

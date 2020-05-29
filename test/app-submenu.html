@@ -9,13 +9,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
 
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <script src="../../iron-test-helpers/mock-interactions.js"></script>
-
-  <script src="../../web-component-tester/browser.js"></script>
-  <script type="module" src="../app-menu.js"></script>
-  <script type="module" src="../app-submenu.js"></script>
-  <script type="module" src="../app-menu-icon-item.js"></script>
+  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+  <script src="../node_modules/wct-browser-legacy/browser.js"></script>
 
   <custom-style>
     <style is="custom-style">
@@ -148,9 +143,13 @@
 
 
   <script type="module">
+import '@polymer/iron-test-helpers/mock-interactions.js';
 import '../app-menu.js';
 import '../app-submenu.js';
 import '../app-menu-icon-item.js';
+import { a11ySuite } from 'wct-browser-legacy/a11ySuite.js';
+import { dom as PolymerDom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
+
 describe('<app-submenu>', function() {
   var menu;
   var submenu1;
@@ -161,6 +160,8 @@ describe('<app-submenu>', function() {
   var trigger2;
   var normalDivColor;
   var colorDivColor;
+  var collapse1;
+  var collapse2;
 
   beforeEach(function(done) {
 
@@ -168,8 +169,8 @@ describe('<app-submenu>', function() {
     submenu1 = menu.querySelectorAll('app-submenu')[0];
     submenu2 = menu.querySelectorAll('app-submenu')[1];
 
-    collapse1 = Polymer.dom(submenu1.root).querySelector('iron-collapse');
-    collapse2 = Polymer.dom(submenu2.root).querySelector('iron-collapse');
+    collapse1 = PolymerDom(submenu1.root).querySelector('iron-collapse');
+    collapse2 = PolymerDom(submenu2.root).querySelector('iron-collapse');
 
     trigger1 = submenu1.querySelector('[slot="submenu-trigger"]');
     trigger2 = submenu2.querySelector('[slot="submenu-trigger"]');
@@ -215,22 +216,23 @@ describe('<app-submenu>', function() {
 
     });
 
-    it('should style the submenu trigger when selecting submenu item', function(done) {
-      this.timeout(9500);
+    it.only('should style the submenu trigger when selecting submenu item', function(done) {
+      this.timeout(10500);
 
       var submenuItem1 = submenu1
         .querySelector('[slot="submenu-content"]').querySelector('.app-menu-item');
 
       MockInteractions.tap(trigger1);
 
-      //because of color trasition
+      //because of color transition
       setTimeout(function() {
         expect(getComputedStyle(submenuItem1).color).to.be.equal(normalDivColor);
         MockInteractions.tap(submenuItem1);
       }, 3000);
 
-      //because of color trasition
+      //because of color transition
       setTimeout(function() {
+        console.log(colorDivColor, getComputedStyle(trigger1).color);
         expect(getComputedStyle(trigger1).color).to.be.equal(colorDivColor);
         expect(getComputedStyle(submenuItem1).color).to.be.equal(colorDivColor);
         done();
@@ -255,7 +257,7 @@ describe('<app-submenu>', function() {
           MockInteractions.tap(submenu2Item1);
         }, 500);
 
-        //because of color trasition
+        //because of color transition
         setTimeout(function() {
           expect(getComputedStyle(trigger1).color).to.be.equal(normalDivColor);
           expect(getComputedStyle(submenu1Item1).color).to.be.equal(normalDivColor);
@@ -285,7 +287,7 @@ describe('<app-submenu>', function() {
           MockInteractions.tap(parentMenuItem1);
         }, 1000);
 
-        //because of color trasition
+        //because of color transition
         setTimeout(function() {
           expect(getComputedStyle(trigger1).color).to.be.equal(normalDivColor);
           expect(getComputedStyle(submenu1Item1).color).to.be.equal(normalDivColor);
@@ -311,7 +313,7 @@ describe('<app-submenu opened>', function() {
 
     opened = fixture('opened');
     submenu = opened.querySelector('app-submenu');
-    collapse = Polymer.dom(submenu.root).querySelector('iron-collapse');
+    collapse = PolymerDom(submenu.root).querySelector('iron-collapse');
     trigger = submenu.querySelector('[slot="submenu-trigger"]');
 
     done();
@@ -404,7 +406,7 @@ describe('<app-submenu no-auto-close>', function() {
         MockInteractions.tap(parentMenuItem1);
       }, 500);
 
-      //because of color trasition
+      //because of color transition
       setTimeout(function() {
         expect(submenu1.opened).to.be.true;
         done();
@@ -432,7 +434,7 @@ describe('<app-submenu no-auto-close>', function() {
         MockInteractions.tap(submenu2Item1);
       }, 500);
 
-      //because of color trasition
+      //because of color transition
       setTimeout(function() {
         expect(submenu1.opened).to.be.true;
         expect(submenu2.opened).to.be.true;
@@ -482,7 +484,7 @@ describe('<app-submenu no-auto-close-on-deactivate>', function() {
         MockInteractions.tap(parentMenuItem);
       }, 500);
 
-      //because of color trasition
+      //because of color transition
       setTimeout(function() {
         expect(submenu.opened).to.be.true;
         done();

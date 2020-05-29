@@ -1,122 +1,116 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"
+    />
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <title>app-menu demo</title>
 
-  <title>app-menu demo</title>
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs@^2.0.0/webcomponents-loader.js"></script>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-
-  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-  <link rel="import" href="../../iron-icons/iron-icons.html">
-  <link rel="import" href="../../iron-icon/iron-icon.html">
-  <script type="module" src="../app-menu.js"></script>
-  <script type="module" src="../app-submenu.js"></script>
-  <script type="module" src="../app-menu-icon-item.js"></script>
-
-  <!-- FIXME(polymer-modulizer):
-        These imperative modules that innerHTML your HTML are
-        a hacky way to be sure that any mixins in included style
-        modules are ready before any elements that reference them are
-        instantiated, otherwise the CSS @apply mixin polyfill won't be
-        able to expand the underlying CSS custom properties.
-        See: https://github.com/Polymer/polymer-modulizer/issues/154
-        -->
     <script type="module">
-const $_documentContainer = document.createElement('div');
+      import '@polymer/iron-demo-helpers/demo-snippet.js';
+      import '@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
+      import '@polymer/iron-icons/iron-icons.js';
+      import '@polymer/paper-styles/color.js';
+      import '@polymer/paper-styles/default-theme.js';
+      import '@polymer/paper-styles/demo-pages.js';
 
-$_documentContainer.innerHTML = `<custom-style>
-    <style is="custom-style" include="demo-pages-shared-styles">
-    html {
-      --app-menu-color: #616161;
-      --primary-color: #F62A5A;
-      --app-menu-selected-bg-color: rgba(0, 0, 0, 0.05);
-    }
-    
-    .vertical-section-container {
-      max-width: 500px;
-    }
-    </style>
-  </custom-style>`;
+      import '../app-menu.js';
+      import '../app-submenu.js';
+      import '../app-menu-icon-item.js';
 
-document.body.appendChild($_documentContainer);
-</script>
-</head>
+      import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
-<body unresolved>
-  <script type="module">
-const $_documentContainer = document.createElement('div');
+      const template = html`
+        <custom-style>
+          <style is="custom-style" include="demo-pages-shared-styles">
+            :root {
+              --app-menu-color: #616161;
+              --primary-color: #f62a5a;
+              --app-menu-selected-bg-color: rgba(0, 0, 0, 0.05);
+            }
 
-$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
-    <h3>Basic app-menu demo</h3>
-    <demo-snippet>
-      <template>
-        <app-menu selected="0">
+            .vertical-section-container {
+              max-width: 500px;
+            }
+          </style>
+        </custom-style>
+      `;
 
-          <a class="app-menu-item" href="javascript:void(0)">
-            <app-menu-icon-item icon="icons:chrome-reader-mode">News</app-menu-icon-item>
-          </a>
+      document.body.appendChild(template.content);
+    </script>
+  </head>
 
-          <app-submenu>
-            <div class="app-menu-item" slot="submenu-trigger">
-              <app-menu-icon-item icon="icons:account-balance">Accounts</app-menu-icon-item>
-              <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
-            </div>
-            <app-menu slot="submenu-content">
-              <a class="app-menu-item" href="javascript:void(0)">Google</a>
-              <a class="app-menu-item" href="javascript:void(0)">Facebook</a>
-              <a class="app-menu-item" href="javascript:void(0)">Twitter</a>
-            </app-menu>
-          </app-submenu>
+  <body unresolved>
+    <div class="vertical-section-container centered">
+      <h3>Basic app-menu demo</h3>
+      <demo-snippet>
+        <template>
+          <custom-style>
+            <style></style>
+          </custom-style>
 
-          <a class="app-menu-item" href="javascript:void(0)">
-            <app-menu-icon-item icon="icons:account-box">Profile</app-menu-icon-item>
-          </a>
+          <app-menu selected="0">
+            <a class="app-menu-item" href="javascript:void(0)">
+              <app-menu-icon-item icon="icons:chrome-reader-mode">News</app-menu-icon-item>
+            </a>
 
-          <a class="app-menu-item" href="javascript:void(0)">
-            <app-menu-icon-item icon="icons:view-module">Collections</app-menu-icon-item>
-          </a>
+            <app-submenu>
+              <div class="app-menu-item" slot="submenu-trigger">
+                <app-menu-icon-item icon="icons:account-balance">Accounts</app-menu-icon-item>
+                <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
+              </div>
+              <app-menu slot="submenu-content">
+                <a class="app-menu-item" href="javascript:void(0)">Google</a>
+                <a class="app-menu-item" href="javascript:void(0)">Facebook</a>
+                <a class="app-menu-item" href="javascript:void(0)">Twitter</a>
+              </app-menu>
+            </app-submenu>
 
-          <app-submenu>
-            <div class="app-menu-item" slot="submenu-trigger">
-              <app-menu-icon-item icon="chrome-reader-mode">Contacts</app-menu-icon-item>
-              <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
-            </div>
-            <app-menu slot="submenu-content">
-              <a class="app-menu-item" href="javascript:void(0)">John</a>
-              <a class="app-menu-item" href="javascript:void(0)">Harry</a>
-            </app-menu>
-          </app-submenu>
+            <a class="app-menu-item" href="javascript:void(0)">
+              <app-menu-icon-item icon="icons:account-box">Profile</app-menu-icon-item>
+            </a>
 
-          <a class="app-menu-item" href="javascript:void(0)">
-            <app-menu-icon-item icon="icons:build">Setting</app-menu-icon-item>
-          </a>
+            <a class="app-menu-item" href="javascript:void(0)">
+              <app-menu-icon-item icon="icons:view-module">Collections</app-menu-icon-item>
+            </a>
 
-          <app-submenu disabled="">
-            <div class="app-menu-item" slot="submenu-trigger">
-              <app-menu-icon-item icon="icons:error">Disabled Submenu</app-menu-icon-item>
-              <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
-            </div>
-            <app-menu slot="submenu-content">
-              <a class="app-menu-item" href="javascript:void(0)">John</a>
-              <a class="app-menu-item" href="javascript:void(0)">Harry</a>
-            </app-menu>
-          </app-submenu>
+            <app-submenu>
+              <div class="app-menu-item" slot="submenu-trigger">
+                <app-menu-icon-item icon="chrome-reader-mode">Contacts</app-menu-icon-item>
+                <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
+              </div>
+              <app-menu slot="submenu-content">
+                <a class="app-menu-item" href="javascript:void(0)">John</a>
+                <a class="app-menu-item" href="javascript:void(0)">Harry</a>
+              </app-menu>
+            </app-submenu>
 
-          <a class="app-menu-item" href="javascript:void(0)" disabled="">
-            <app-menu-icon-item icon="icons:face">Disabled</app-menu-icon-item>
-          </a>
+            <a class="app-menu-item" href="javascript:void(0)">
+              <app-menu-icon-item icon="icons:build">Setting</app-menu-icon-item>
+            </a>
 
-        </app-menu>
-      </template>
-    </demo-snippet>
-  </div>`;
+            <app-submenu disabled="">
+              <div class="app-menu-item" slot="submenu-trigger">
+                <app-menu-icon-item icon="icons:error">Disabled Submenu</app-menu-icon-item>
+                <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
+              </div>
+              <app-menu slot="submenu-content">
+                <a class="app-menu-item" href="javascript:void(0)">John</a>
+                <a class="app-menu-item" href="javascript:void(0)">Harry</a>
+              </app-menu>
+            </app-submenu>
 
-document.body.appendChild($_documentContainer);
-</script>
-</body>
-
+            <a class="app-menu-item" href="javascript:void(0)" disabled="">
+              <app-menu-icon-item icon="icons:face">Disabled</app-menu-icon-item>
+            </a>
+          </app-menu>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
 </html>
