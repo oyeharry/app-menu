@@ -11,10 +11,10 @@ language: node_js
 node_js: stable
 before_script:
 - npm install -g polymer-cli
-- polymer install --variants
+- npm install
 script:
-- xvfb-run polymer test
-- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then polymer test -s 'default'; fi
+- xvfb-run polymer test --npm
+- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then polymer test -s --npm 'default'; fi
 env:
   global:
   - secure: Zn4JiSrgnj4aLXr5n8EaZ5uMtSpK9/qT+8KPn4616IdGoSg7IUrQJub8l6C6R4hT7Xicv3rqaLUHhp5nNxTUClV03Z5P5tVOcBazxA/AQ6Nke2KApxsTZOX1QjUbIOz9C8hq5HBbmIgMHxlU45cj7gYE8vYteGc+w8PaAlrbhFr3aSbhl+hnb7YgGIaMJtDybQyYMRkCMIYieh96j+TOgvuMG4ERj6FDwqI78rNw0rhh+F1TpPabulv2H6Wugp3OLYh1hcvq+XvMbJ9BXeeHwVdf3Ad++B6JnJaBpx0/ohFEfBmKgeNrCi0BTDKx53RLOsmcNTXS5LHaooNfsnF6LBB39Iy3XwbZvcUqvaGDgxIx9ce2sqW+BsF9C5xdk2qq/AzIKFjFy8/yQLOiVo6ZpvNYtxF2IZJSou/xMEFOE1At20Z5NR1aPeTBn73XyFxapFwMLPfnz5nK3B9EWMFJhZ75Kttvax8hZRVcv4Qo3wXugbxOOqS5BRWTlaokRMWanHb4VNpuS54V9+wsZfVb5dbvTg8P9/xEMa36txH32UGlik4WNa9XNoBCC8M8jY3PXs7P+2A1LD6dilFRjejrxCVsyJiqKaKW9J3iHz6wlTbGjTqx+RECsKY1znwzgsdId3kVX42DDPzVfj3eSL8nNeeBr4p5Mj88cdZcJe4RiJ8=
