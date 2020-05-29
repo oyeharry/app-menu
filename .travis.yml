@@ -7,15 +7,13 @@ env:
   - secure: Zn4JiSrgnj4aLXr5n8EaZ5uMtSpK9/qT+8KPn4616IdGoSg7IUrQJub8l6C6R4hT7Xicv3rqaLUHhp5nNxTUClV03Z5P5tVOcBazxA/AQ6Nke2KApxsTZOX1QjUbIOz9C8hq5HBbmIgMHxlU45cj7gYE8vYteGc+w8PaAlrbhFr3aSbhl+hnb7YgGIaMJtDybQyYMRkCMIYieh96j+TOgvuMG4ERj6FDwqI78rNw0rhh+F1TpPabulv2H6Wugp3OLYh1hcvq+XvMbJ9BXeeHwVdf3Ad++B6JnJaBpx0/ohFEfBmKgeNrCi0BTDKx53RLOsmcNTXS5LHaooNfsnF6LBB39Iy3XwbZvcUqvaGDgxIx9ce2sqW+BsF9C5xdk2qq/AzIKFjFy8/yQLOiVo6ZpvNYtxF2IZJSou/xMEFOE1At20Z5NR1aPeTBn73XyFxapFwMLPfnz5nK3B9EWMFJhZ75Kttvax8hZRVcv4Qo3wXugbxOOqS5BRWTlaokRMWanHb4VNpuS54V9+wsZfVb5dbvTg8P9/xEMa36txH32UGlik4WNa9XNoBCC8M8jY3PXs7P+2A1LD6dilFRjejrxCVsyJiqKaKW9J3iHz6wlTbGjTqx+RECsKY1znwzgsdId3kVX42DDPzVfj3eSL8nNeeBr4p5Mj88cdZcJe4RiJ8=
   - secure: qWsmcdEIX9UFZ3tJz4sSVfix7WP471OXF9WFjz3DyrO0YomJ5QRajfHchByos+C/CYPzeltvoPHvCz/NknGx8fkdi0D7y90mBCG9r3T33LXzEJR9BZQrmyUr8vAR1tD2mnLuGDDsgsVEwSGMAcNM13Lr5GwCj5rx7t6I1dbEihpI9b4UW4IvFGU5h3IQ1NNsfFzPhFr9ibpMs3Ru2kENxbAUtn0gBaZqsnY6k4UTBKzzgRlLGtZKid4IB9USQhVOWRLs6qMZR5fKyYlyzOvTpxP0lxLgckcMSrlKS/IkpqgLldCEmLBP+EuLNnMKOkJpUnTRnd8JqQSOd63JBaHQ4zi7+VG6fB2d/IOV4j0LHl9QG6XSXe4+k2YZrbJajo+/FhaICMVfnf45W8M+3Hnxf+9xu65QTjBRl6SheFQWyitenynNjXYmMBqWbmLjj6SIDnSGarOB5bQtMoMwcbgB/UT6TpY7ORYwe96ami7jIcmpKcdCWy2J0NCPp0IyMlotpCGGun1EtI8QHRcDwMg9/Zz1WeUkMKF/TI8B1WKZaXl+Xco1P0X1LV7QBaqBeQ9VTxMxtfo15dhjCOhsWFyuY60grBsKkjLuOWtNy9KpC819Ht7m64r45kkhxw2lU5HTIUBNxarzmRhyxfbMtCqLZKM3y44rfQXmN74/Nz9zH9s=
 node_js: node
+sudo: required
 addons:
   firefox: latest
-  apt:
-    packages:
-      - dpkg
   chrome: stable
 script:
-  - polymer test -l chrome --npm
-  - polymer test -l firefox --npm
+  - xvfb-run polymer test -l chrome --npm
+  - xvfb-run polymer test -l firefox --npm
   - >-
     if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then polymer test
     --module-resolution=node --npm -s 'default'; fi
